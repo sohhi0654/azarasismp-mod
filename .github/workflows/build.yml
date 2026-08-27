@@ -8,18 +8,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Gradle本体を動かす用 (Java 21)
-      - name: Set up JDK 21 for Gradle
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-
-      # Fabric modのコンパイル用 (Java 25)
+      # コンパイル用の Java 25（環境変数は上書きしない）
       - name: Set up JDK 25 for Toolchain
         uses: actions/setup-java@v4
         with:
           java-version: '25'
+          distribution: 'temurin'
+          update-environment: false
+
+      # Gradle 実行用の Java 21（こちらをデフォルト JAVA_HOME にする）
+      - name: Set up JDK 21 for Gradle
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Setup Gradle
