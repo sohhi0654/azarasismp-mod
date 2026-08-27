@@ -1,1 +1,9 @@
-﻿rootProject.name = 'azarasismp'
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'azarasismp'
+"@, $Utf8NoBom)
