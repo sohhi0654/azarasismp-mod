@@ -45,7 +45,7 @@ public class AzarasiMod implements ModInitializer {
                 Scoreboard sb = server.getScoreboard();
                 ScoreboardObjective obj = sb.getNullableObjective("azarasi_tps");
                 if (obj != null) {
-                    ScoreboardScore score = sb.getOrCreateScore(ScoreHolder.fromName("TPS"), obj);
+                    ScoreAccess score = sb.getOrCreateScore(ScoreHolder.fromName("TPS"), obj);
                     score.setScore((int) currentTps);
                 }
             }
@@ -199,10 +199,12 @@ public class AzarasiMod implements ModInitializer {
                 ScoreboardObjective obj = sb.getNullableObjective("azarasi_sb");
                 if (obj != null) sb.removeObjective(obj);
 
-                obj = sb.addObjective("azarasi_sb", ScoreboardCriterion.DUMMY, Text.literal("§b§lあざらしSMP"), ScoreboardCriterion.RenderType.INTEGER);
+                // 修正箇所: 1.20.4用に引数を追加 (true, null)
+                obj = sb.addObjective("azarasi_sb", ScoreboardCriterion.DUMMY, Text.literal("§b§lあざらしSMP"), ScoreboardCriterion.RenderType.INTEGER, true, null);
                 sb.setObjectiveSlot(ScoreboardDisplaySlot.SIDEBAR, obj);
 
-                ScoreboardScore scoreDiscord = sb.getOrCreateScore(ScoreHolder.fromName("§ehttps://discord.gg/ZmKjZXjVSW"), obj);
+                // 修正箇所: ScoreboardScore -> ScoreAccess に変更
+                ScoreAccess scoreDiscord = sb.getOrCreateScore(ScoreHolder.fromName("§ehttps://discord.gg/ZmKjZXjVSW"), obj);
                 scoreDiscord.setScore(1);
 
                 p.sendMessage(Text.literal("§a[AzarasiSMP] スコアボードを設定したよ！"), false);
