@@ -1,15 +1,25 @@
-﻿{
-  "schema_version": 1,
+{
+  "schemaVersion": 1,
   "id": "azarasismp",
   "version": "1.0.0",
   "name": "AzarasiSMP Mod",
+  "description": "AzarasiSMP custom mod",
+  "authors": [
+    "Satoshi"
+  ],
+  "contact": {},
+  "license": "MIT",
   "environment": "*",
   "entrypoints": {
-    "main": [ "com.azarasismp.AzarasiMod" ]
+    "main": [
+      "com.azarasismp.AzarasiMod"
+    ]
   },
+  "mixins": [],
   "depends": {
-    "fabricloader": ">=0.14.21",
-    "minecraft": "*",
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.4",
+    "java": ">=17",
     "fabric-api": "*"
   }
 }
