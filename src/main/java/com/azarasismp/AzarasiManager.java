@@ -28,11 +28,9 @@ public class AzarasiManager {
     private static final File CONFIG_DIR = new File("config/azarasismp");
     private static final File HOMES_FILE = new File(CONFIG_DIR, "homes.json");
 
-    // UUID -> HomeName -> Location
     private static Map<String, Map<String, HomeLoc>> homesMap = new HashMap<>();
     private static final Map<UUID, Boolean> pvpStatus = new HashMap<>();
     
-    // TPAリクエスト保持: Target UUID -> RequestInfo
     public static final Map<UUID, TpaRequest> pendingTpa = new HashMap<>();
 
     public record HomeLoc(double x, double y, double z, float yaw, float pitch, String dimension) {}
@@ -63,7 +61,6 @@ public class AzarasiManager {
         }
     }
 
-    // Home関連機能
     public static void setHome(ServerPlayerEntity player, String name) {
         String uuid = player.getUuidAsString();
         homesMap.putIfAbsent(uuid, new HashMap<>());
@@ -88,7 +85,7 @@ public class AzarasiManager {
         String uuid = player.getUuidAsString();
         if (homesMap.containsKey(uuid) && homesMap.get(uuid).containsKey(name)) {
             HomeLoc loc = homesMap.get(uuid).get(name);
-            RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, new Identifier(loc.dimension()));
+            RegistryKey<World> key = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(loc.dimension()));
             ServerWorld targetWorld = player.getServer().getWorld(key);
             if (targetWorld != null) {
                 player.teleport(targetWorld, loc.x(), loc.y(), loc.z(), loc.yaw(), loc.pitch());
@@ -103,7 +100,6 @@ public class AzarasiManager {
         return homesMap.getOrDefault(player.getUuidAsString(), Collections.emptyMap());
     }
 
-    // PvPオンオフ
     public static boolean isPvpEnabled(UUID uuid) {
         return pvpStatus.getOrDefault(uuid, false);
     }
@@ -112,13 +108,11 @@ public class AzarasiManager {
         pvpStatus.put(uuid, !isPvpEnabled(uuid));
     }
 
-    // TPA リクエスト送信
     public static void sendTpaRequest(ServerPlayerEntity sender, ServerPlayerEntity target, boolean isHere) {
         pendingTpa.put(target.getUuid(), new TpaRequest(sender.getUuid(), sender.getGameProfile().getName(), isHere, System.currentTimeMillis()));
 
         sender.sendMessage(Text.literal("§a[AzarasiSMP] §e" + target.getGameProfile().getName() + " §aに" + (isHere ? "TPAHERE" : "TPA") + "申請を送ったよ！"), false);
 
-        // カラフルなクリック可能チャットメッセージの生成
         String reqType = isHere ? "tpahere" : "tpa";
         MutableText msg = Text.literal("\n§b----------------------------------------\n")
                 .append(Text.literal("§e" + sender.getGameProfile().getName() + " §aから§c" + reqType.toUpperCase() + "申請§aが届いています！\n"))
@@ -126,13 +120,13 @@ public class AzarasiManager {
 
         MutableText acceptBtn = Text.literal("【 許可する 】")
                 .formatted(Formatting.GREEN, Formatting.BOLD)
-                .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept " + sender.getGameProfile().getName()))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§aクリックで許可"))));
+                .styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/tpaccept " + sender.getGameProfile().getName()))
+                        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§aクリックで許可"))));
 
         MutableText denyBtn = Text.literal("   【 拒否する 】")
                 .formatted(Formatting.RED, Formatting.BOLD)
-                .styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpadeny " + sender.getGameProfile().getName()))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("§cクリックで拒否"))));
+                .styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/tpadeny " + sender.getGameProfile().getName()))
+                        .withHoverEvent(new HoverEvent.ShowText(Text.literal("§cクリックで拒否"))));
 
         msg.append(acceptBtn).append(denyBtn).append(Text.literal("\n§b----------------------------------------\n"));
         target.sendMessage(msg, false);
@@ -169,7 +163,6 @@ public class AzarasiManager {
         }
     }
 
-    // 安全なランダムテレポート (RTP)
     public static void executeRtp(ServerPlayerEntity player, RegistryKey<World> dimKey) {
         ServerWorld world = player.getServer().getWorld(dimKey);
         if (world == null) return;
@@ -190,9 +183,8 @@ public class AzarasiManager {
                 BlockState feet = world.getBlockState(pos.up());
                 BlockState head = world.getBlockState(pos.up(2));
 
-                // 足場が固く、身体2マスが空気（マグマ・奈落回避）
                 if (state.isOpaqueFullCube(world, pos) && feet.isAir() && head.isAir()) {
-                    if (dimKey == World.NETHER && y >= 120) continue; // ネザー天井岩盤回避
+                    if (dimKey == World.NETHER && y >= 120) continue;
 
                     player.teleport(world, x + 0.5, y + 1.0, z + 0.5, player.getYaw(), player.getPitch());
                     player.sendMessage(Text.literal("§a[AzarasiSMP] 安全な場所にランダムテレポートしたよ！"), false);
