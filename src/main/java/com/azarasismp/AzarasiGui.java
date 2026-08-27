@@ -1,9 +1,10 @@
 package com.azarasismp;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
@@ -54,11 +55,10 @@ public class AzarasiGui {
             if (row >= 6) break;
             int base = row * 9;
 
-            // プレイヤーヘッド
+            // プレイヤーヘッド (DataComponentTypes を利用)
             ItemStack head = new ItemStack(Items.PLAYER_HEAD);
-            head.setCustomName(Text.literal("§e" + target.getGameProfile().getName()));
-            NbtCompound tag = head.getOrCreateNbt();
-            tag.putString("SkullOwner", target.getGameProfile().getName());
+            head.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§e" + target.getGameProfile().getName()));
+            head.set(DataComponentTypes.PROFILE, new ProfileComponent(target.getGameProfile()));
             inv.setStack(base, head);
 
             // ディメンション表示
@@ -67,7 +67,7 @@ public class AzarasiGui {
             String dimName = "§aオーバーワールド";
             if (dimKey == World.NETHER) { dimItem = new ItemStack(Items.NETHERRACK); dimName = "§cネザー"; }
             else if (dimKey == World.END) { dimItem = new ItemStack(Items.END_STONE); dimName = "§eエンド"; }
-            dimItem.setCustomName(Text.literal("§f現在地: " + dimName));
+            dimItem.set(DataComponentTypes.CUSTOM_NAME, Text.literal("§f現在地: " + dimName));
             inv.setStack(base + 1, dimItem);
 
             // 申請ボタン (緑色のガラス)
@@ -99,8 +99,7 @@ public class AzarasiGui {
         for (Map.Entry<String, AzarasiManager.HomeLoc> entry : homes.entrySet()) {
             if (slot >= 27) break;
             homeNames.add(entry.getKey());
-            ItemStack bed = createItem(Items.RED_BED, "§a" + entry.getKey());
-            bed.setCustomName(Text.literal("§a" + entry.getKey() + " §7(クリックでTP)"));
+            ItemStack bed = createItem(Items.RED_BED, "§a" + entry.getKey() + " §7(クリックでTP)");
             inv.setStack(slot++, bed);
         }
 
@@ -135,7 +134,7 @@ public class AzarasiGui {
 
     private static ItemStack createItem(net.minecraft.item.Item item, String name) {
         ItemStack stack = new ItemStack(item);
-        stack.setCustomName(Text.literal(name));
+        stack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(name));
         return stack;
     }
 
