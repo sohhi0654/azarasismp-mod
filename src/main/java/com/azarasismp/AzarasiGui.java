@@ -4,7 +4,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.ChestScreenHandler;
+import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.screen.slot.SlotActionType;
@@ -100,8 +100,7 @@ public class AzarasiGui {
             if (slot >= 27) break;
             homeNames.add(entry.getKey());
             ItemStack bed = createItem(Items.RED_BED, "§a" + entry.getKey());
-            NbtCompound tag = bed.getOrCreateNbt();
-            bed.setCustomName(Text.literal("§a" + entry.getKey() + " §7(左クリック: TP / 右クリック: 削除)"));
+            bed.setCustomName(Text.literal("§a" + entry.getKey() + " §7(クリックでTP)"));
             inv.setStack(slot++, bed);
         }
 
@@ -146,11 +145,11 @@ public class AzarasiGui {
             Text.literal(title)));
     }
 
-    // アイテムの持ち出しを防ぐ標準CustomChestHandler
-    private static class CustomChestHandler extends ChestScreenHandler {
+    // アイテムの持ち出しを防ぐカスタムコンテナハンドラー
+    private static class CustomChestHandler extends GenericContainerScreenHandler {
         private final java.util.function.BiConsumer<Integer, ServerPlayerEntity> onClick;
 
-        public CustomChestHandler(ScreenHandlerType<ChestScreenHandler> type, int syncId, net.minecraft.entity.player.PlayerInventory playerInventory, net.minecraft.inventory.Inventory inventory, int rows, java.util.function.BiConsumer<Integer, ServerPlayerEntity> onClick) {
+        public CustomChestHandler(ScreenHandlerType<GenericContainerScreenHandler> type, int syncId, net.minecraft.entity.player.PlayerInventory playerInventory, net.minecraft.inventory.Inventory inventory, int rows, java.util.function.BiConsumer<Integer, ServerPlayerEntity> onClick) {
             super(type, syncId, playerInventory, inventory, rows);
             this.onClick = onClick;
         }
