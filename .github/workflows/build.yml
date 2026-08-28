@@ -8,18 +8,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 全てを Java 25 で統一する
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           java-version: '25'
           distribution: 'temurin'
 
-      # バージョンを 'release' にして最新の Gradle（Java 25対応版）を自動取得
+      # v4 に上げてNodeの警告を消す！バージョン指定は 'current'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 'release'
+          gradle-version: 'current'
 
       - name: Build with Gradle
         run: gradle build --no-daemon
