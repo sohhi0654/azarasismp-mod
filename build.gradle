@@ -12,11 +12,15 @@ repositories {
     }
 }
 
+// マッピング自体を無効化する設定
+loom {
+    accessWidenerPath = file("src/main/resources/azarasismp.accesswidener") // もし使ってたら。不要なら消してOK
+}
+
 dependencies {
     minecraft 'com.mojang:minecraft:26.2'
     
-    // マッピングなしでセットアップする設定
-    mappings loom.unmappedMod()
+    // マッピングを使わない場合は dependencies から mappings 行自体を消すのが正解
 
     modImplementation 'net.fabricmc:fabric-loader:0.16.10'
     modImplementation 'net.fabricmc:fabric-api:0.115.0+26.2'
