@@ -1,19 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    configurations.classpath {
-        resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'org.ow2.asm') {
-                // Fabric Loom内部のASMを最新(Java 25対応)に強制上書き
-                details.useVersion '+'
-            }
-        }
-    }
-}
-
 plugins {
-    id 'fabric-loom' version '1.17-SNAPSHOT' // 26.2に対応したLoomのバージョン
+    id 'fabric-loom' version '1.17.20'
 }
 
 version = '1.0.0'
@@ -28,9 +14,12 @@ repositories {
 
 dependencies {
     minecraft 'com.mojang:minecraft:26.2'
-    mappings 'net.fabricmc:yarn:26.2+build.1:v2'
-    modImplementation 'net.fabricmc:fabric-loader:0.19.3' // Loom 1.17に合わせてローダーも最新推奨
-    modImplementation 'net.fabricmc.fabric-api:fabric-api:0.150.0+26.2' // ※実際の対応APIバージョンに適宜調整してね
+    
+    // Yarnの代わりにMojang公式マッピングを使用
+    mappings loom.officialMojangMappings()
+
+    modImplementation 'net.fabricmc:fabric-loader:0.16.10'
+    modImplementation 'net.fabricmc.fabric-api:fabric-api:0.115.0+26.2'
 }
 
 java {
