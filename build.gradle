@@ -12,15 +12,11 @@ repositories {
     }
 }
 
-// マッピング自体を無効化する設定
-loom {
-    accessWidenerPath = file("src/main/resources/azarasismp.accesswidener") // もし使ってたら。不要なら消してOK
-}
-
 dependencies {
     minecraft 'com.mojang:minecraft:26.2'
     
-    // マッピングを使わない場合は dependencies から mappings 行自体を消すのが正解
+    // マッピングが存在しない/使わない場合のダミー指定（Fabric公式のプレースホルダー）
+    mappings 'net.fabricmc:yarn:1.20+build.1:v2'
 
     modImplementation 'net.fabricmc:fabric-loader:0.16.10'
     modImplementation 'net.fabricmc:fabric-api:0.115.0+26.2'
