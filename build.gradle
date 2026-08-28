@@ -15,11 +15,11 @@ repositories {
 dependencies {
     minecraft 'com.mojang:minecraft:26.2'
     
-    // Yarnの代わりにMojang公式マッピングを使用
-    mappings loom.officialMojangMappings()
+    // マッピングなしでセットアップする設定
+    mappings loom.unmappedMod()
 
     modImplementation 'net.fabricmc:fabric-loader:0.16.10'
-    modImplementation 'net.fabricmc.fabric-api:fabric-api:0.115.0+26.2'
+    modImplementation 'net.fabricmc:fabric-api:0.115.0+26.2'
 }
 
 java {
