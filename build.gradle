@@ -1,5 +1,18 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // Fabric Loom内部のASMをJava 25対応バージョンに強制アップデート
+        classpath 'org.objectweb.asm:asm:9.7'
+        classpath 'org.objectweb.asm:asm-commons:9.7'
+        classpath 'org.objectweb.asm:asm-tree:9.7'
+        classpath 'org.objectweb.asm:asm-util:9.7'
+    }
+}
+
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT' // 1.8-SNAPSHOT から Java 25 対応版へ更新
+    id 'fabric-loom' version '1.9-SNAPSHOT'
 }
 
 version = '1.0.0'
