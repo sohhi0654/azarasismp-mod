@@ -3,11 +3,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Fabric Loom内部のASMをJava 25対応バージョンに強制アップデート
-        classpath 'org.objectweb.asm:asm:9.7'
-        classpath 'org.objectweb.asm:asm-commons:9.7'
-        classpath 'org.objectweb.asm:asm-tree:9.7'
-        classpath 'org.objectweb.asm:asm-util:9.7'
+        // Group IDを新しい org.ow2.asm に修正してバージョンを指定
+        classpath 'org.ow2.asm:asm:9.7.1'
+        classpath 'org.ow2.asm:asm-commons:9.7.1'
+        classpath 'org.ow2.asm:asm-tree:9.7.1'
+        classpath 'org.ow2.asm:asm-util:9.7.1'
     }
 }
 
