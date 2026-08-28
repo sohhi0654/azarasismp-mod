@@ -2,17 +2,18 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        // Group IDを新しい org.ow2.asm に修正してバージョンを指定
-        classpath 'org.ow2.asm:asm:9.7.1'
-        classpath 'org.ow2.asm:asm-commons:9.7.1'
-        classpath 'org.ow2.asm:asm-tree:9.7.1'
-        classpath 'org.ow2.asm:asm-util:9.7.1'
+    configurations.classpath {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.ow2.asm') {
+                // Fabric Loom内部のASMを最新(Java 25対応)に強制上書き
+                details.useVersion '+'
+            }
+        }
     }
 }
 
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.9.2'
 }
 
 version = '1.0.0'
